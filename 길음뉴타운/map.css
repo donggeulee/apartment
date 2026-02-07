@@ -97,3 +97,72 @@ body {
     margin-top: 20px; 
     font-weight: bold; 
 }
+
+/* 요약 정리 섹션 스타일 */
+.summary-container {
+    max-width: 900px;        /* 전체 너비 제한 */
+    margin: 50px auto;       /* 상하 50px, 좌우 auto로 '가운데 정렬' */
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    text-align: left;        /* 내부 텍스트는 '왼쪽 정렬' */
+}
+
+.summary-container h2 {
+    color: #2f3542;
+    border-left: 5px solid #ff4757;
+    padding-left: 15px;
+    margin-top: 0;
+    margin-bottom: 30px;
+    font-size: 24px;
+}
+
+/* 2열 레이아웃 설정 */
+.summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 1:1 비율로 두 칸 나눔 */
+    gap: 25px;
+}
+
+.summary-card {
+    /* 카드 내부도 왼쪽 정렬 유지 */
+    text-align: left; 
+}
+
+.summary-card h3 {
+    margin-top: 0;
+    font-size: 19px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #f1f2f6;
+    margin-bottom: 15px;
+}
+
+.summary-card ul {
+    padding-left: 18px; /* 불렛 포인트 공간 */
+    margin: 0;
+}
+
+.summary-card li {
+    margin-bottom: 12px;
+    line-height: 1.6;
+    color: #444;
+    font-size: 15px;
+    list-style-type: disc; /* 불렛 포인트 표시 */
+}
+
+/* 항목별 타이틀 색상 */
+.pros h3 { color: #2ed573; }
+.cons h3 { color: #ffa502; }
+.school h3 { color: #1e90ff; }
+.news h3 { color: #ff4757; }
+
+/* 모바일 등 작은 화면에서는 1열로 변경 */
+@media (max-width: 768px) {
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+    .summary-container {
+        margin: 30px 15px; /* 모바일에서는 좌우 여백 살짝 부여 */
+    }
+}
