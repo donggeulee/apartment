@@ -1,6 +1,5 @@
-/* script.js */
+/* map.js */
 
-// 1. 아파트 단지 데이터 관리
 const aptData = [
     {
         name: "래미안길음 센터피스",
@@ -44,7 +43,6 @@ const aptData = [
         top: "51%",
         left: "40%"
     },
-	
     {
         name: "길음뉴타운 8단지 래미안",
         detail: "• 연식: 2010년<br>• 세대수: 1497세대<br>• 매매: 12-16.8억 / 전세: 5-10억<br>• 주차: 정보 없음 (1,806대)<br>• 학군: 미아초, 길원초 동별 배정",
@@ -59,37 +57,30 @@ const aptData = [
     }
 ];
 
-// 2. 마커를 지도 위에 생성하는 함수
 function renderMarkers() {
     const container = document.getElementById('markerContainer');
-    
     aptData.forEach(apt => {
         const marker = document.createElement('div');
         marker.className = 'apt-marker';
         marker.style.top = apt.top;
         marker.style.left = apt.left;
         marker.innerHTML = '<i>🏢</i>';
-        
-        // 클릭 이벤트 연결
         marker.onclick = () => showInfo(apt.name, apt.detail);
-        
         container.appendChild(marker);
     });
 }
 
-// 3. 팝업 노출 함수
 function showInfo(name, detail) {
     document.getElementById('aptName').innerText = name;
+    // .innerHTML을 사용하여 데이터 내의 <br> 태그가 적용되도록 함
     document.getElementById('aptDetail').innerHTML = detail;
     document.getElementById('modalBg').style.display = 'block';
     document.getElementById('modalContent').style.display = 'block';
 }
 
-// 4. 팝업 닫기 함수
 function hideInfo() {
     document.getElementById('modalBg').style.display = 'none';
     document.getElementById('modalContent').style.display = 'none';
 }
 
-// 페이지 로드 시 마커 그리기 실행
 window.onload = renderMarkers;
