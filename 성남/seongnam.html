@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>성남 원도심 부동산 정보 지도</title>
+    <link rel="stylesheet" href="style_seongnam.css?version=0.1">
+</head>
+<body>
+
+    <h1>📍 성남 원도심 단지별 상세 정보</h1>
+    
+    <div class="tab-container">
+        <button class="tab-btn active" onclick="openTab(event, 'sansung')">산성역</button>
+        <button class="tab-btn" onclick="openTab(event, 'sinheung')">신흥역</button>
+        <button class="tab-btn" onclick="openTab(event, 'dandae')">단대오거리</button>
+    </div>
+
+    <div id="sansung" class="tab-content active">
+        <div class="map-container" id="map-sansung">
+            <img src="map_sansung.png" alt="산성역 지도">
+        </div>
+    </div>
+
+    <div id="sinheung" class="tab-content">
+        <div class="map-container" id="map-sinheung">
+            <img src="map_sinheung.png" alt="신흥역 지도">
+        </div>
+    </div>
+
+    <div id="dandae" class="tab-content">
+        <div class="map-container" id="map-dandae">
+            <img src="map_dandae.png" alt="단대오거리 지도">
+        </div>
+    </div>
+
+    <div id="modalBg" class="modal-bg" onclick="hideInfo()"></div>
+    <div id="modalContent" class="modal-content">
+        <h2 id="aptName">단지명</h2>
+        <p id="aptDetail">상세 내용</p>
+        <button class="close-btn" onclick="hideInfo()">닫기</button>
+    </div>
+	
+	<div class="summary-container">
+		<h2>📋 성남 원도심 지역 요약</h2>
+		<div class="summary-grid">
+			<div class="summary-card pros">
+				<h3>✅ 장점</h3>
+				<ul>
+					<li><strong>교통:</strong> 8호선 라인을 통한 잠실 및 강남권 접근성 우수</li>
+					<li><strong>신축 타운:</strong> 포레스티아, 자이푸르지오 등 대규모 신축 브랜드 단지 밀집</li>
+				</ul>
+			</div>
+			<div class="summary-card news">
+				<h3>🚀 개발 호재</h3>
+				<ul>
+					<li><strong>입주 예정:</strong> 산성역 헤리스톤(27년 12월) 등 지속적인 공급</li>
+					<li><strong>정비:</strong> 노후 주거지의 대규모 재개발 및 공공임대 분양전환 예정</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+    <script src="script_seongnam.js?version=0.1"></script>
+</body>
+</html>
