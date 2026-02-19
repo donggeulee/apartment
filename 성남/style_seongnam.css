@@ -1,164 +1,45 @@
-/* style_seongnam.css */
+/* 기본 레이아웃 및 모바일 최적화 */
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { margin: 0; font-family: 'Pretendard', sans-serif; background: #f5f7fa; overflow-x: hidden; }
+.container { width: 100%; max-width: 600px; margin: 0 auto; background: #fff; min-height: 100vh; }
 
-/* 1. 모든 요소에 box-sizing 적용하여 패딩으로 인한 잘림 방지 */
-* {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent; /* 모바일 터치 시 하이라이트 제거 */
-}
+/* 탭 스타일 */
+.tabs { display: flex; background: #fff; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #eee; }
+.tab-btn { flex: 1; padding: 15px; border: none; background: none; font-size: 1rem; font-weight: bold; color: #999; cursor: pointer; }
+.tab-btn.active { color: #3498db; border-bottom: 3px solid #3498db; }
 
-body { 
-    font-family: 'Malgun Gothic', sans-serif; 
-    text-align: center; 
-    background-color: #f0f2f5; 
-    margin: 0; 
-    padding: 10px; 
-    width: 100%;
-    overflow-x: hidden; /* 가로 스크롤 절대 방지 */
-}
+/* 지도 및 마커 */
+.tab-content { display: none; width: 100%; }
+.tab-content.active { display: block; }
+.map-container { position: relative; width: 100%; overflow: hidden; }
+.map-container img { width: 100%; display: block; }
 
-h1 {
-    font-size: 1.5rem;
-    margin: 15px 0;
-    word-break: keep-all; /* 단어 단위 줄바꿈으로 가독성 향상 */
-}
-
-/* 탭 메뉴 - 가로 잘림 방지 */
-.tab-container {
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto 15px;
-    display: flex;
-    justify-content: center;
-    gap: 5px;
-    padding: 0 5px;
-}
-
-.tab-btn {
-    flex: 1; /* 탭 버튼 너비를 균등하게 배분 */
-    padding: 10px 5px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    font-weight: bold;
-    white-space: nowrap;
-    min-width: 0; /* flex 환경에서 글자 넘침 방지 */
-}
-
-.tab-btn.active {
-    background: #ff4757;
-    color: #fff;
-    border-color: #ff4757;
-}
-
-/* 지도 섹션 - 너비 100% 고정 */
-.tab-content {
-    display: none;
-    width: 100%;
-}
-
-.tab-content.active {
-    display: block;
-}
-
-.map-container { 
-    position: relative; 
-    display: block; 
-    margin: 0 auto;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
-    border-radius: 8px; 
-    background: #fff; 
-    width: 100%; /* 화면 너비에 맞춤 */
-    max-width: 1000px; /* PC에서도 너무 커지지 않게 제한 */
-    overflow: hidden;
-}
-
-.map-container img {
-    display: block;
-    width: 100% !important; /* 이미지 너비 강제 고정 */
-    height: auto !important;
-}
-
-/* 마커 스타일 - 모바일 가시성 최적화 */
 .apt-marker {
-    position: absolute; 
-    width: 32px; 
-    height: 32px;
-    background: #ff4757; 
-    color: white; 
-    border-radius: 50% 50% 50% 0;
-    transform: rotate(-45deg) translate(50%, -50%); /* 마커 꼬리 위치 보정 */
-    cursor: pointer;
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-    border: 2px solid white; 
-    box-shadow: 1px 1px 5px rgba(0,0,0,0.3);
-    z-index: 5;
+    position: absolute;
+    width: 30px; height: 30px;
+    background: #fff; border-radius: 50% 50% 50% 0;
+    border: 2px solid #3498db;
+    display: flex; align-items: center; justify-content: center;
+    transform: rotate(-45deg);
+    cursor: pointer; box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    transform-origin: bottom left; /* 마커 끝점이 좌표 기준이 되도록 설정 */
 }
+.apt-marker i { transform: rotate(45deg); font-style: normal; font-size: 16px; }
 
-.apt-marker i { 
-    transform: rotate(45deg); 
-    font-style: normal; 
-    font-size: 16px; 
-}
+/* 대장 마커(👑) */
+.apt-marker.master { background: #FFD700 !important; border-color: #D4AF37 !important; z-index: 10; box-shadow: 0 0 10px rgba(255,215,0,0.6); }
 
-/* 팝업 창 */
-.modal-bg { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 100; }
-.modal-content {
-    display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    width: 85%; max-width: 320px; background: white; padding: 20px; border-radius: 15px; z-index: 101; text-align: left;
-}
+/* 입지 분석 카드 */
+.info-section { padding: 20px 15px; }
+.analysis-card { background: #fff; border-radius: 12px; padding: 18px; border: 1px solid #eee; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+.analysis-card h3 { margin: 0 0 15px 0; color: #2c3e50; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; }
+.info-table { width: 100%; border-collapse: collapse; }
+.info-table th { width: 85px; background: #f8f9fa; padding: 10px; font-size: 0.85rem; text-align: left; border-bottom: 1px solid #eee; }
+.info-table td { padding: 10px; font-size: 0.85rem; border-bottom: 1px solid #eee; color: #444; }
 
-/* 설명 섹션 (요약) - 잘림 방지 핵심 */
-.summary-container { 
-    width: 100%;
-    max-width: 900px; 
-    margin: 25px auto; 
-    padding: 20px; 
-    background: #fff; 
-    border-radius: 12px; 
-    text-align: left;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-}
-
-.summary-container h2 {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-    padding-left: 10px;
-    border-left: 4px solid #ff4757;
-}
-
-.summary-grid {
-    display: grid;
-    grid-template-columns: 1fr; /* 모바일 기본 1열 */
-    gap: 20px;
-}
-
-.summary-card h3 {
-    font-size: 1.1rem;
-    margin-top: 0;
-    margin-bottom: 10px;
-}
-
-.summary-card ul {
-    padding-left: 20px;
-    margin: 0;
-}
-
-.summary-card li {
-    font-size: 0.95rem;
-    line-height: 1.6;
-    margin-bottom: 10px;
-    color: #333;
-    word-break: keep-all; /* 설명이 잘리지 않고 줄바꿈 되도록 설정 */
-}
-
-/* PC 버전 레이아웃 (769px 이상) */
-@media (min-width: 769px) {
-    .summary-grid { grid-template-columns: 1fr 1fr; }
-    .tab-btn { padding: 12px 30px; font-size: 1rem; }
-    .apt-marker { width: 36px; height: 36px; }
-    .apt-marker i { font-size: 18px; }
-}
+/* 팝업 모달 */
+#modalBg { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; }
+#modalContent { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; max-width: 400px; background: #fff; padding: 20px; border-radius: 15px; z-index: 1001; }
+#modalContent h2 { margin-top: 0; font-size: 1.2rem; color: #333; }
+#aptDetail { line-height: 1.6; font-size: 0.95rem; margin-bottom: 20px; color: #555; }
+#modalContent button { width: 100%; padding: 12px; background: #3498db; color: #fff; border: none; border-radius: 8px; font-weight: bold; }
