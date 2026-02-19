@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
     <title>내 집 마련 프로젝트</title>
     <style>
         body { font-family: sans-serif; line-height: 1.6; padding: 20px; }
@@ -17,9 +22,16 @@
 
     <div class="link-box">
         <ul>
-			<li><a href="길음뉴타운/gireum.html">길음뉴타운 상세 보기</a></li>
-			<li><a href="성남/seongnam.html">성남 상세 보기</a></li>
+            <li><a href="길음뉴타운/gireum.html" id="link-gireum">길음뉴타운 상세 보기</a></li>
+            <li><a href="성남/seongnam.html" id="link-seongnam">성남 상세 보기</a></li>
         </ul>
     </div>
+
+    <script>
+        // 페이지 이동 시에도 캐시를 타지 않도록 링크 뒤에 타임스탬프를 자동으로 붙여주는 스크립트
+        const timestamp = new Date().getTime();
+        document.getElementById('link-gireum').href += "?v=" + timestamp;
+        document.getElementById('link-seongnam').href += "?v=" + timestamp;
+    </script>
 </body>
 </html>
