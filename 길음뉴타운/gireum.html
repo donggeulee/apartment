@@ -3,67 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>길음뉴타운 아파트 정보 지도</title>
-    <link rel="stylesheet" href="map.css?v=1.2">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>길음 뉴타운 입지 가이드</title>
+    <link rel="stylesheet" href="style_gireum.css">
 </head>
 <body>
+    <div class="container">
+        <div class="tabs">
+            <button class="tab-btn active">길음 뉴타운</button>
+        </div>
 
-    <h2>📍 길음뉴타운 단지별 상세 정보</h2>
-    <p>지도 위 마커를 클릭하여 정보를 확인하세요.</p>
+        <div class="tab-content active">
+            <div class="map-container" id="map-gireum">
+                <img src="map_gireum.png" alt="길음 뉴타운 지도">
+            </div>
+        </div>
 
-    <div class="map-container" id="markerContainer">
-        <img src="map_gireum.png" alt="길음동 지도" style="display: block; max-width: 1000px; width: 100%; height: auto;">
+        <div id="area-detail-section" class="info-section"></div>
     </div>
 
-    <div id="modalBg" class="modal-bg" onclick="hideInfo()"></div>
-    <div id="modalContent" class="modal-content">
-        <h2 id="aptName">단지명</h2>
-        <div id="aptDetail" class="detail-text">상세 내용</div>
-        <button class="close-btn" onclick="hideInfo()">닫기</button>
+    <div id="modalBg" onclick="hideInfo()"></div>
+    <div id="modalContent">
+        <h2 id="aptName"></h2>
+        <div id="aptDetail"></div>
+        <button onclick="hideInfo()">닫기</button>
     </div>
-	
-	<div class="summary-container">
-		<h2>📋 길음 뉴타운 요약 정리</h2>
-		
-		<div class="summary-list">
-			<div class="summary-item pros">
-				<h3>✅ 장점</h3>
-				<ul>
-					<li><strong>교통:</strong> 4호선 길음역 역세권, 도심(종로, 중구) 접근성 우수</li>
-					<li><strong>규모:</strong> 1만 세대 이상 대단지, 1군 브랜드 위주 구성</li>
-					<li><strong>인프라:</strong> 도로/공원 체계적 확보, 백화점 등 편의시설 풍부</li>
-					<li><strong>지형:</strong> 단지 대부분이 평지라 이동 편리</li>
-				</ul>
-			</div>
 
-			<div class="summary-item cons">
-				<h3>⚠️ 단점</h3>
-				<ul>
-					<li><strong>경사도:</strong> 8단지 일부 및 상월곡 일대 지형상 경사 존재</li>
-					<li><strong>구축 혼재:</strong> 2003~2007년식 초기 단지(1,2,4,5,6단지 등) 혼재</li>
-				</ul>
-			</div>
-
-			<div class="summary-item school">
-				<h3>🎓 학군 및 상권</h3>
-				<ul>
-					<li><strong>학군:</strong> 길음초/중 중심의 우수한 공교육 (길음중 학업성취도 우수)</li>
-					<li><strong>고교:</strong> 계성고(대입 우수), 대일외고 인접</li>
-					<li><strong>상권:</strong> 현대·롯데백화점, 이마트 및 단지 내 상가 활성화</li>
-				</ul>
-			</div>
-
-			<div class="summary-item news">
-				<h3>🚀 개발 호재</h3>
-				<ul>
-					<li><strong>교통:</strong> 동북선 경전철 추가 개통 예정</li>
-					<li><strong>재개발:</strong> 길음 5구역, 신월곡 1구역 정비사업 진행 중</li>
-					<li><strong>이미지:</strong> 과거 정비구역 개선으로 지역 이미지 지속 상승</li>
-				</ul>
-			</div>
-		</div>
-	</div>
-
-    <script src="map.js?v=1.2"></script>
+    <script src="script_gireum.js"></script>
 </body>
 </html>
