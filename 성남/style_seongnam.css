@@ -1,4 +1,4 @@
-/* 기본 초기화 */
+/* 기본 레이아웃 및 모바일 최적화 */
 * {
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
@@ -9,7 +9,6 @@ body {
     padding: 0;
     font-family: 'Pretendard', sans-serif;
     background: #f5f7fa;
-    /* 스크롤 복구를 위해 overflow 제거 */
 }
 
 .container {
@@ -20,7 +19,7 @@ body {
     min-height: 100vh;
 }
 
-/* 탭 메뉴 */
+/* 탭 스타일 */
 .tabs {
     display: flex;
     background: #fff;
@@ -46,7 +45,7 @@ body {
     border-bottom: 3px solid #3498db;
 }
 
-/* 지도 영역 */
+/* 지도 및 마커 영역 */
 .tab-content {
     display: none;
 }
@@ -55,21 +54,18 @@ body {
     display: block;
 }
 
-/* style_seongnam.css - 간격 수정 버전 */
-
 .map-container {
     position: relative;
     width: 100%;
-    /* 고정 높이 480px를 제거하고 이미지 높이에 맞춤 */
+    /* 1. 고정 height를 삭제하고 auto로 변경하여 이미지 높이에 맞춤 */
     height: auto; 
-    min-height: 200px; /* 이미지가 로드되기 전 최소 높이 확보 */
     overflow: hidden;
     background: #f0f0f0;
     touch-action: none; 
 }
 
 .map-wrapper {
-    /* absolute 대신 relative를 사용하여 부모가 높이를 인식하게 함 */
+    /* 2. absolute를 사용하면 부모가 높이를 인식 못하므로 relative로 변경 */
     position: relative; 
     width: 100%;
     transform-origin: 0 0;
@@ -77,26 +73,25 @@ body {
 }
 
 .map-wrapper img {
+    /* 3. 이미지가 컨테이너 너비에 꽉 차고 높이는 비율대로 조절되게 설정 */
     display: block;
     width: 100%;
-    height: auto; /* 이미지 비율에 맞게 높이 자동 조절 */
+    height: auto; 
     user-select: none;
     -webkit-user-drag: none;
 }
 
-/* 마커 레이어는 이미지 위에 띄워야 하므로 absolute 유지 */
+/* 4. 마커 레이어는 이미지 위에 겹쳐야 하므로 absolute 유지 */
 .marker-layer {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    /* 레이어 자체는 클릭을 통과시켜 지도가 드래그되게 함 */
-    pointer-events: none; 
+    pointer-events: none;
     z-index: 10;
 }
 
-/* 마커 디자인 (24px 최적화) */
 .apt-marker {
     position: absolute;
     width: 24px;
@@ -110,9 +105,8 @@ body {
     transform: rotate(-45deg);
     cursor: pointer;
     box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
-    /* 중요: 마커는 클릭 신호를 직접 받아야 함 */
-    pointer-events: auto; 
-    z-index: 11;
+    pointer-events: auto;
+    z-index: 20;
 }
 
 .apt-marker i {
@@ -126,25 +120,23 @@ body {
     border-color: #D4AF37 !important;
 }
 
-/* 하단 정보 섹션 */
+/* 하단 정보 카드 */
 .info-section {
-    /* 지도 바로 아래에 붙도록 상단 패딩 조절 */
-    padding: 10px 15px 20px 15px; 
-    flex-grow: 1;
+    padding: 5px 15px 30px; /* 위쪽(5px) 간격을 최소화 */
 }
 
 .analysis-card {
     background: #fff;
     border-radius: 12px;
-    padding: 20px;
+    padding: 18px;
     border: 1px solid #eee;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
 .analysis-card h3 {
     margin: 0 0 15px 0;
-    color: #2c3e50;
     font-size: 1.1rem;
+    color: #2c3e50;
     border-bottom: 2px solid #3498db;
     padding-bottom: 8px;
 }
@@ -156,15 +148,15 @@ body {
 
 .info-table th {
     width: 85px;
-    text-align: left;
-    padding: 10px 5px;
-    font-size: 0.85rem;
     background: #f8f9fa;
+    padding: 10px;
+    font-size: 0.85rem;
+    text-align: left;
     border-bottom: 1px solid #eee;
 }
 
 .info-table td {
-    padding: 10px 5px;
+    padding: 10px;
     font-size: 0.85rem;
     border-bottom: 1px solid #eee;
 }
@@ -214,7 +206,7 @@ body {
     width: 100%;
     padding: 12px;
     background: #3498db;
-    color: #fff;
+    color: white;
     border: none;
     border-radius: 8px;
     font-weight: bold;
