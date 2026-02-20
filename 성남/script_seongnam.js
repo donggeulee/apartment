@@ -174,6 +174,7 @@ function openTab(evt, areaId) {
     updateAreaInfo(areaId);
 }
 
+/* 4. 마커 생성 및 클릭/터치 판정 함수 */
 function renderMarkers(areaId) {
     const layer = document.querySelector(`#map-${areaId} .marker-layer`);
     if (!layer) return;
@@ -188,6 +189,7 @@ function renderMarkers(areaId) {
         marker.style.left = apt.left;
         marker.innerHTML = `<i>${isMaster ? '👑' : '🏢'}</i>`;
         
+        // 현재 줌 배율에 맞춰 마커 크기 초기 보정
         marker.style.transform = `rotate(-45deg) scale(${1 / transformState.scale})`;
         
         let startPoint = { x: 0, y: 0 };
@@ -201,12 +203,11 @@ function renderMarkers(areaId) {
             const endPoint = { x: e.clientX, y: e.clientY };
             const distance = Math.hypot(endPoint.x - startPoint.x, endPoint.y - startPoint.y);
             
+            // 10px 미만 움직임일 때만 클릭(모달 표시)으로 간주
             if (distance < 10) {
                 e.preventDefault();
                 e.stopPropagation();
-                
-                // 모달을 띄우기 전 pointer 상태 해제 유도
-                marker.releasePointerCapture(e.pointerId);
+                // 브라우저 렌더링 타이밍을 고려해 setTimeout 사용
                 setTimeout(() => showInfo(apt.name, apt.detail), 10);
             }
         });
@@ -227,40 +228,50 @@ function resetZoom(areaId) {
     initZoom(container, wrapper);
 }
 
+/* 1. 줌 및 드래그 초기화 함수 */
 function initZoom(container, wrapper) {
-    container.onpointerdown = (e) => {
-        // 모달이 열려있으면 동작 안함
-        if (document.getElementById('modalBg').style.display === 'block') return;
-        if (e.target.closest('.apt-marker')) return;
+    let startPos = { x: 0, y: 0 };
 
+    container.onpointerdown = (e) => {
+        // 마커 클릭 시에는 드래그/줌 방지
+        if (e.target.closest('.apt-marker')) return;
+        
         activePointers.set(e.pointerId, e);
         
         if (activePointers.size === 1) {
             isDraggingGlobal = true;
+            // 현재 변환 상태를 기준으로 시작 좌표 설정
             startPos = { x: e.clientX - transformState.x, y: e.clientY - transformState.y };
         }
         container.setPointerCapture(e.pointerId);
     };
 
     container.onpointermove = (e) => {
-        if (document.getElementById('modalBg').style.display === 'block') return;
         if (!activePointers.has(e.pointerId)) return;
-        
         activePointers.set(e.pointerId, e);
         
+        // [모바일] 두 손가락 핀치 줌 처리
         if (activePointers.size === 2) {
-            isDraggingGlobal = false;
+            isDraggingGlobal = false; // 줌 동작 시 드래그 일시 중단
             const pointers = Array.from(activePointers.values());
-            const curDiff = Math.hypot(pointers[0].clientX - pointers[1].clientX, pointers[0].clientY - pointers[1].clientY);
             
-            if (prevDiff > 0) {
-                const delta = curDiff / prevDiff;
+            // 두 손가락 사이의 현재 거리 계산
+            const curDistance = Math.hypot(
+                pointers[0].clientX - pointers[1].clientX, 
+                pointers[0].clientY - pointers[1].clientY
+            );
+            
+            if (prevDistance > 0) {
+                const delta = curDistance / prevDistance;
+                // 두 손가락의 중간 지점을 줌의 중심점으로 설정
                 const centerX = (pointers[0].clientX + pointers[1].clientX) / 2;
                 const centerY = (pointers[0].clientY + pointers[1].clientY) / 2;
+                
                 zoomAt(delta, centerX, centerY, container, wrapper);
             }
-            prevDiff = curDiff;
+            prevDistance = curDistance;
         } 
+        // [PC/모바일] 싱글 터치 혹은 마우스 드래그 처리
         else if (isDraggingGlobal && activePointers.size === 1) {
             transformState.x = e.clientX - startPos.x;
             transformState.y = e.clientY - startPos.y;
@@ -268,20 +279,19 @@ function initZoom(container, wrapper) {
         }
     };
 
-    const handlePointerUp = (e) => {
+    const endHandler = (e) => {
         activePointers.delete(e.pointerId);
-        if (activePointers.size < 2) prevDiff = -1;
-        if (activePointers.size === 0) {
-            isDraggingGlobal = false;
-        }
+        if (activePointers.size < 2) prevDistance = -1;
+        if (activePointers.size === 0) isDraggingGlobal = false;
         if (container.hasPointerCapture(e.pointerId)) {
             container.releasePointerCapture(e.pointerId);
         }
     };
 
-    container.onpointerup = handlePointerUp;
-    container.onpointercancel = handlePointerUp;
+    container.onpointerup = endHandler;
+    container.onpointercancel = endHandler;
 
+    // [PC] 마우스 휠 줌 처리
     container.onwheel = (e) => {
         e.preventDefault();
         const delta = e.deltaY > 0 ? 0.9 : 1.1;
@@ -289,23 +299,30 @@ function initZoom(container, wrapper) {
     };
 }
 
+/* 2. 특정 지점 기준 확대/축소 계산 함수 */
 function zoomAt(delta, clientX, clientY, container, wrapper) {
     const newScale = Math.min(Math.max(transformState.scale * delta, 1), 3);
     if (newScale === transformState.scale) return;
 
     const rect = container.getBoundingClientRect();
-    const targetX = clientX - rect.left;
-    const targetY = clientY - rect.top;
+    // 화면상의 좌표를 이미지 내부 좌표로 환산
+    const mouseX = clientX - rect.left;
+    const mouseY = clientY - rect.top;
 
-    transformState.x -= (targetX - transformState.x) * (newScale / transformState.scale - 1);
-    transformState.y -= (targetY - transformState.y) * (newScale / transformState.scale - 1);
+    // 중심점을 고정한 상태에서 스케일 변화에 따른 좌표 이동 보정
+    transformState.x -= (mouseX - transformState.x) * (newScale / transformState.scale - 1);
+    transformState.y -= (mouseY - transformState.y) * (newScale / transformState.scale - 1);
     transformState.scale = newScale;
     
     applyTransform(wrapper);
 }
 
+/* 3. 실제 CSS 변환 적용 함수 (마커 역보정 포함) */
 function applyTransform(wrapper) {
+    // 이미지와 마커 레이어 전체 이동/확대
     wrapper.style.transform = `translate(${transformState.x}px, ${transformState.y}px) scale(${transformState.scale})`;
+    
+    // 지도가 확대되어도 마커 크기는 일정하게 유지 (1/scale)
     wrapper.querySelectorAll('.apt-marker').forEach(m => {
         m.style.transform = `rotate(-45deg) scale(${1 / transformState.scale})`;
     });
