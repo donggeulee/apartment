@@ -158,7 +158,8 @@ const areaInfo = {
  * 3. 기능 로직 (모바일 클릭 완벽 대응)
  */
 let transformState = { scale: 1, x: 0, y: 0 };
-let isDragging = false;
+let isDraggingGlobal = false;
+let activePointers = new Map(); // 멀티터치 관리
 
 function openTab(evt, areaId) {
     document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
@@ -167,7 +168,8 @@ function openTab(evt, areaId) {
     document.getElementById(areaId).classList.add("active");
     evt.currentTarget.classList.add("active");
     
-    resetAndInit(areaId);
+    resetZoom(areaId);
+    renderMarkers(areaId);
     updateAreaInfo(areaId);
 }
 
@@ -189,25 +191,19 @@ function renderMarkers(areaId) {
         
         let startPoint = { x: 0, y: 0 };
 
-        // PointerDown: 시작 지점 저장
         marker.addEventListener('pointerdown', (e) => {
             startPoint = { x: e.clientX, y: e.clientY };
             e.stopPropagation(); 
         });
 
-        // PointerUp: 이동 거리가 짧을 때만 모달 호출
         marker.addEventListener('pointerup', (e) => {
             const endPoint = { x: e.clientX, y: e.clientY };
             const distance = Math.hypot(endPoint.x - startPoint.x, endPoint.y - startPoint.y);
             
-            if (distance < 10) { // 5px에서 10px로 약간 여유를 둡니다.
+            if (distance < 10) {
                 e.preventDefault();
                 e.stopPropagation();
-                
-                // [수정 핵심] 브라우저 이벤트 루프가 끝난 뒤 모달을 띄우도록 지연 실행
-                setTimeout(() => {
-                    showInfo(apt.name, apt.detail);
-                }, 10); 
+                setTimeout(() => showInfo(apt.name, apt.detail), 10);
             }
         });
         
@@ -215,43 +211,85 @@ function renderMarkers(areaId) {
     });
 }
 
-function resetAndInit(areaId) {
+function resetZoom(areaId) {
     transformState = { scale: 1, x: 0, y: 0 };
     const container = document.getElementById(`map-${areaId}`);
     const wrapper = container.querySelector('.map-wrapper');
-    
-    wrapper.style.transform = `translate(0px, 0px) scale(1)`;
-    renderMarkers(areaId);
+    applyTransform(wrapper);
+    initZoom(container, wrapper);
+}
 
-    let startDrag = { x: 0, y: 0 };
+function initZoom(container, wrapper) {
+    let prevDiff = -1;
+    let startPos = { x: 0, y: 0 };
 
     container.onpointerdown = (e) => {
         if (e.target.closest('.apt-marker')) return;
-        isDragging = true;
-        startDrag = { x: e.clientX - transformState.x, y: e.clientY - transformState.y };
+        activePointers.set(e.pointerId, e);
+        
+        if (activePointers.size === 1) {
+            isDraggingGlobal = true;
+            startPos = { x: e.clientX - transformState.x, y: e.clientY - transformState.y };
+        }
         container.setPointerCapture(e.pointerId);
     };
 
     container.onpointermove = (e) => {
-        if (!isDragging) return;
-        transformState.x = e.clientX - startDrag.x;
-        transformState.y = e.clientY - startDrag.y;
-        applyTransform(wrapper);
+        activePointers.set(e.pointerId, e);
+        
+        // 멀티터치 (핀치 줌) 처리
+        if (activePointers.size === 2) {
+            isDraggingGlobal = false; // 줌할 때는 드래그 중단
+            const pointers = Array.from(activePointers.values());
+            const curDiff = Math.hypot(pointers[0].clientX - pointers[1].clientX, pointers[0].clientY - pointers[1].clientY);
+            
+            if (prevDiff > 0) {
+                const centerX = (pointers[0].clientX + pointers[1].clientX) / 2;
+                const centerY = (pointers[0].clientY + pointers[1].clientY) / 2;
+                const delta = curDiff / prevDiff;
+                
+                zoomAt(delta, centerX, centerY, container, wrapper);
+            }
+            prevDiff = curDiff;
+        } 
+        // 싱글터치 (드래그) 처리
+        else if (isDraggingGlobal && activePointers.size === 1) {
+            transformState.x = e.clientX - startPos.x;
+            transformState.y = e.clientY - startPos.y;
+            applyTransform(wrapper);
+        }
     };
 
-    container.onpointerup = () => { isDragging = false; };
+    const endHandler = (e) => {
+        activePointers.delete(e.pointerId);
+        if (activePointers.size < 2) prevDiff = -1;
+        if (activePointers.size === 0) isDraggingGlobal = false;
+    };
 
+    container.onpointerup = endHandler;
+    container.onpointercancel = endHandler;
+
+    // PC 휠 줌
     container.onwheel = (e) => {
         e.preventDefault();
         const delta = e.deltaY > 0 ? 0.9 : 1.1;
-        const newScale = Math.min(Math.max(transformState.scale * delta, 1), 3);
-        const rect = container.getBoundingClientRect();
-        
-        transformState.x -= (e.clientX - rect.left - transformState.x) * (newScale / transformState.scale - 1);
-        transformState.y -= (e.clientY - rect.top - transformState.y) * (newScale / transformState.scale - 1);
-        transformState.scale = newScale;
-        applyTransform(wrapper);
+        zoomAt(delta, e.clientX, e.clientY, container, wrapper);
     };
+}
+
+function zoomAt(delta, clientX, clientY, container, wrapper) {
+    const newScale = Math.min(Math.max(transformState.scale * delta, 1), 3);
+    if (newScale === transformState.scale) return;
+
+    const rect = container.getBoundingClientRect();
+    const targetX = clientX - rect.left;
+    const targetY = clientY - rect.top;
+
+    transformState.x -= (targetX - transformState.x) * (newScale / transformState.scale - 1);
+    transformState.y -= (targetY - transformState.y) * (newScale / transformState.scale - 1);
+    transformState.scale = newScale;
+    
+    applyTransform(wrapper);
 }
 
 function applyTransform(wrapper) {
@@ -264,7 +302,6 @@ function applyTransform(wrapper) {
 function updateAreaInfo(areaId) {
     const info = areaInfo[areaId];
     const infoContainer = document.getElementById('area-detail-section');
-    
     infoContainer.innerHTML = `
         <div class="analysis-card">
             <h3>🔍 ${info.title}</h3>
