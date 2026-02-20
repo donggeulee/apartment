@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>성남 원도심 부동산 가이드</title>
-    <link rel="stylesheet" href="style_seongnam.css">
+    <link rel="stylesheet" href="style_seongnam.css?v=20260220">
 </head>
 <body>
     <div class="container">
@@ -16,17 +19,28 @@
 
         <div id="sansung" class="tab-content active">
             <div class="map-container" id="map-sansung">
-                <img src="map_sansung.png" alt="산성역 지도">
+                <div class="map-wrapper">
+                    <img src="map_sansung.png" alt="산성역 지도">
+                    <div class="marker-layer"></div>
+                </div>
             </div>
         </div>
+
         <div id="sinheung" class="tab-content">
             <div class="map-container" id="map-sinheung">
-                <img src="map_sinheung.png" alt="신흥역 지도">
+                <div class="map-wrapper">
+                    <img src="map_sinheung.png" alt="신흥역 지도">
+                    <div class="marker-layer"></div>
+                </div>
             </div>
         </div>
+
         <div id="dandae" class="tab-content">
             <div class="map-container" id="map-dandae">
-                <img src="map_dandae.png" alt="단대오거리 지도">
+                <div class="map-wrapper">
+                    <img src="map_dandae.png" alt="단대오거리 지도">
+                    <div class="marker-layer"></div>
+                </div>
             </div>
         </div>
 
@@ -35,11 +49,11 @@
 
     <div id="modalBg" onclick="hideInfo()"></div>
     <div id="modalContent">
-        <h2 id="aptName"></h2>
-        <div id="aptDetail"></div>
+        <h2 id="aptName">단지명</h2>
+        <div id="aptDetail">상세내용</div>
         <button onclick="hideInfo()">닫기</button>
     </div>
 
-    <script src="script_seongnam.js"></script>
+    <script src="script_seongnam.js?v=20260220"></script>
 </body>
 </html>

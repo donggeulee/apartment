@@ -1,110 +1,113 @@
 /* script_seongnam.js */
 
+/**
+ * 1. 아파트 상세 데이터 (원문 100% 반영)
+ */
 const areaData = {
     sansung: [
         {
             name: "산성역 포레스티아 (대장)",
             detail: "• 연식: 2020년<br>• 세대수: 4089세대<br>• 매매: 12.5억(59㎡), 14.5억(84㎡)<br>• 전세: 5.9억(59㎡), 6.8억(84㎡)<br>• 주차: 1.22대 (4,998대)<br>• 학군: 성남북초(131-132, 134-136동), 성남신흥초(101-130, 133, 137-139동)",
-            top: "34.5%", left: "19.5%" // 사용자 수정 좌표
+            top: "34.5%", left: "17.5%" // 사용자 수정 좌표
         },
         {
             name: "산성역 헤리스톤",
             detail: "• 연식: 2027/12 예정<br>• 세대수: 3487세대<br>• 매매: 11.3억(59㎡), 15.5억(84㎡)<br>• 주차: 1.32대 (4,604대)<br>• 학군: 성남북초(303-424동), 단대초(101-104, 201-208, 301-302동)",
-            top: "25%", left: "41%" // 사용자 수정 좌표
+            top: "25%", left: "39%" // 사용자 수정 좌표
         },
         {
             name: "산성역 자이푸르지오 1단지",
             detail: "• 연식: 2024년<br>• 세대수: 1852세대<br>• 매매: 11.9억(59㎡), 13.2억(84㎡)<br>• 전세: 5.6억(59㎡), 6.2억(84㎡)<br>• 주차: 1.25대 (1,596대)<br>• 학군: 희망대초",
-            top: "84%", left: "19%" // 사용자 수정 좌표
+            top: "84%", left: "17%" // 사용자 수정 좌표
         },
         {
             name: "산성역 자이푸르지오 2단지",
             detail: "• 연식: 2024년<br>• 세대수: 1270세대<br>• 매매: 11.5억(59㎡)/13억, 13억(84㎡)/15억<br>• 전세: 5.9억(59㎡), 6.8억(84㎡)<br>• 주차: 1.25대 (1,596대)<br>• 학군: 희망대초",
-            top: "70%", left: "24%" // 사용자 수정 좌표
+            top: "70%", left: "22%" // 사용자 수정 좌표
         },
         {
             name: "산성역 자이푸르지오 3단지",
             detail: "• 연식: 2024년<br>• 세대수: 840세대<br>• 매매: 12.1억(59㎡)/13억, 11.3억(84㎡)/15.5억<br>• 전세: 5.9억(59㎡), 7.5억(84㎡)<br>• 주차: 1.25대 (1,057대)<br>• 학군: 성남북초",
-            top: "72%", left: "40%" // 사용자 수정 좌표
+            top: "72%", left: "38%" // 사용자 수정 좌표
         },
         {
             name: "성남단대 푸르지오",
             detail: "• 연식: 2012년<br>• 세대수: 1015세대<br>• 매매: 10.6억(59㎡), 11.3억(84㎡)<br>• 전세: 4.5억(59㎡), 5.3억(84㎡)<br>• 주차: 1.28대 (1,300대)<br>• 학군: 단대초",
-            top: "67%", left: "64%" // 사용자 수정 좌표
+            top: "67%", left: "62%" // 사용자 수정 좌표
         },
         {
             name: "은행현대",
             detail: "• 연식: 1994년<br>• 세대수: 1258세대<br>• 매매: 7.6억(84㎡)<br>• 전세: 4.2억(84㎡)<br>• 주차: 0.42대 (533대)<br>• 학군: 중부초",
-            top: "53%", left: "91%" // 사용자 수정 좌표
+            top: "53%", left: "89%" // 사용자 수정 좌표
         }
     ],
     sinheung: [
         {
             name: "신흥역하늘채랜더스원 (대장)",
             detail: "• 연식: 2022년<br>• 세대수: 2411세대<br>• 매매: 11.6억(59㎡), 12.7억(84㎡)<br>• 전세: 5억(59㎡), 7.1억(84㎡)<br>• 주차: 1.14대 (2,753대)<br>• 학군: 성남제일초",
-            top: "34%", left: "72%" 
+            top: "34%", left: "70%" 
         },
         {
             name: "중앙힐스테이트 1차",
             detail: "• 연식: 2012년<br>• 세대수: 356세대<br>• 매매: 8.7억(59㎡), 9.3억(84㎡)<br>• 전세: 5.4억(59㎡), 5억(84㎡)<br>• 주차: 1.59대 (569대)<br>• 학군: 성남제일초, 성남중앙초 (주소지 배정)",
-            top: "65%", left: "82%" 
+            top: "65%", left: "80%" 
         },
         {
             name: "중앙힐스테이트 2차",
             detail: "• 연식: 2014년<br>• 세대수: 751세대<br>• 매매: 8.7억(59㎡), 9.3억(84㎡)<br>• 전세: 5.4억(59㎡), 5억(84㎡)<br>• 주차: 1.57대 (1,186대)<br>• 학군: 성남제일초, 대하초 (주소지 배정)",
-            top: "64.5%", left: "72.5%"
+            top: "64.5%", left: "70.5%"
         }
     ],
     dandae: [
         {
             name: "e편한세상 금빛그랑메종 1단지 (대장)",
             detail: "• 연식: 2023년<br>• 세대수: 1135세대<br>• 매매: 10.9억(59㎡), 11.7억(84㎡)<br>• 전세: 5.3억(59㎡), 6.1억(84㎡)<br>• 주차: 1.21대 (1,378대)<br>• 학군: 금상초, 단남초, 하원초(선택)",
-            top: "54%", left: "54%" 
+            top: "54%", left: "52%" 
         },
         {
             name: "e편한세상 금빛그랑메종 2단지",
             detail: "• 연식: 2022년<br>• 세대수: 443세대<br>• 매매: 8.9억(59㎡), 9.4억(74㎡)<br>• 전세: 4.9억(59㎡), 5.4억(74㎡)<br>• 주차: 1.23대 (545대)<br>• 학군: 금상초",
-            top: "63.5%", left: "62%"
+            top: "63.5%", left: "60%"
         },
         {
             name: "e편한세상 금빛그랑메종 3단지",
             detail: "• 연식: 2023년<br>• 세대수: 784세대<br>• 매매: 10.2억(59㎡), 11.3억(84㎡)<br>• 전세: 5.8억(59㎡), 5.7억(84㎡)<br>• 주차: 1.24대 (974대)<br>• 학군: 금상초",
-            top: "57%", left: "70%"
+            top: "57%", left: "68%"
         },
         {
             name: "e편한세상 금빛그랑메종 4단지",
             detail: "• 연식: 2022년<br>• 세대수: 948세대<br>• 매매: 10.4억(59㎡), 11.4억(84㎡)<br>• 전세: 5.2억(59㎡), 5.8억(84㎡)<br>• 주차: 1.24대 (974대)<br>• 학군: 하원초",
-            top: "38%", left: "78%"
+            top: "38%", left: "76%"
         },
         {
             name: "e편한세상 금빛그랑메종 5단지",
             detail: "• 연식: 2023년<br>• 세대수: 1102세대<br>• 매매: 9.7억(59㎡), 10.7억(84㎡)<br>• 전세: 5.1억(59㎡), 5.7억(84㎡)<br>• 주차: 1.22대 (1,352대)<br>• 학군: 금상초",
-            top: "52%", left: "87%"
+            top: "52%", left: "85%"
         },
         {
             name: "중앙동롯데캐슬",
             detail: "• 연식: 2012년<br>• 세대수: 545세대<br>• 매매: 9.6억(59㎡), 10억(84㎡)<br>• 전세: 4.9억(59㎡), 6.5억(84㎡)<br>• 주차: 1.23대 (674대)<br>• 학군: 단남초",
-            top: "59.5%", left: "40%" 
+            top: "59.5%", left: "38%" 
         },
         {
             name: "황송마을",
             detail: "• 연식: 1993년<br>• 세대수: 990세대<br>• 매매: 5억(49㎡)<br>• 전세: 2.9억(49㎡)<br>• 주차: 0.41대 (408대)<br>• 학군: 하원초",
-            top: "39%", left: "93%" 
+            top: "39%", left: "91%" 
         },
         {
             name: "성남 한신",
             detail: "• 연식: 1990년<br>• 세대수: 585세대<br>• 매매: 7.1억(60㎡), 8.7억(84㎡)<br>• 전세: 4억(60㎡), 4.1억(84㎡)<br>• 기타: 중앙난방, 희망대초",
-            top: "40.5%", left: "14%" 
+            top: "40.5%", left: "12%" 
         },
         {
             name: "성남 두산",
             detail: "• 연식: 1993년<br>• 세대수: 570세대<br>• 매매: 6.3억(71㎡), 7.6억(84㎡)<br>• 전세: 4억(60㎡), 4.1억(84㎡)<br>• 주차: 0.7대 (399대)<br>• 기타: 중앙난방, 희망대초",
-            top: "34.5%", left: "3.8%"
+            top: "34.5%", left: "1.8%"
         },
         {
             name: "청구",
             detail: "• 연식: 1994년<br>• 세대수: 493세대<br>• 매매: 7.2억(63㎡), 8억(84㎡)<br>• 전세: 1.5억(63㎡), 5억(84㎡)<br>• 주차: 0.54대 (267대)<br>• 학군: 희망대초",
-            top: "50%", left: "10%"
+            top: "50%", left: "8%"
         }
     ]
 };
@@ -149,23 +152,28 @@ const areaInfo = {
     }
 };
 
-// 3. 기능 로직 (사용자님의 기존 함수 구조를 그대로 유지)
+/**
+ * 3. 줌 및 드래그 제어
+ */
+let transformState = { scale: 1, x: 0, y: 0 };
+let isDragging = false; // 전역으로 선언하여 ReferenceError 방지
+
 function openTab(evt, areaId) {
-    const tabContents = document.getElementsByClassName("tab-content");
-    for (let i = 0; i < tabContents.length; i++) { tabContents[i].classList.remove("active"); }
-    const tabBtns = document.getElementsByClassName("tab-btn");
-    for (let i = 0; i < tabBtns.length; i++) { tabBtns[i].classList.remove("active"); }
+    document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
+    document.querySelectorAll(".tab-btn").forEach(el => el.classList.remove("active"));
     
     document.getElementById(areaId).classList.add("active");
     evt.currentTarget.classList.add("active");
     
+    resetZoom(areaId);
     renderMarkers(areaId);
-    updateAreaInfo(areaId); // 하단 상세 정보 업데이트 실행
+    updateAreaInfo(areaId);
 }
 
 function renderMarkers(areaId) {
-    const container = document.getElementById(`map-${areaId}`);
-    container.querySelectorAll('.apt-marker').forEach(m => m.remove());
+    const layer = document.querySelector(`#map-${areaId} .marker-layer`);
+    if (!layer) return;
+    layer.innerHTML = '';
     
     areaData[areaId].forEach(apt => {
         const marker = document.createElement('div');
@@ -174,15 +182,78 @@ function renderMarkers(areaId) {
         marker.className = isMaster ? 'apt-marker master' : 'apt-marker';
         marker.style.top = apt.top;
         marker.style.left = apt.left;
+        marker.innerHTML = `<i>${isMaster ? '👑' : '🏢'}</i>`;
         
-        const icon = isMaster ? '👑' : '🏢';
-        marker.innerHTML = `<i>${icon}</i>`;
+        // 줌 역보정 적용
+        marker.style.transform = `rotate(-45deg) scale(${1 / transformState.scale})`;
         
-        marker.onclick = (e) => { 
-            e.stopPropagation(); 
-            showInfo(apt.name, apt.detail); 
-        };
-        container.appendChild(marker);
+        // 클릭 이벤트 리스너 등록
+        marker.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation(); // 지도 드래그 이벤트가 실행되지 않도록 차단
+            showInfo(apt.name, apt.detail);
+        });
+
+        // 모바일 터치 대응 (필요 시)
+        marker.addEventListener('touchend', (e) => {
+            // 드래그 중이 아닐 때만 실행되도록 로직 보완 가능
+            if (!isDragging) {
+                e.preventDefault();
+                e.stopPropagation();
+                showInfo(apt.name, apt.detail);
+            }
+        });
+        
+        layer.appendChild(marker);
+    });
+}
+
+function resetZoom(areaId) {
+    transformState = { scale: 1, x: 0, y: 0 };
+    const container = document.getElementById(`map-${areaId}`);
+    const wrapper = container.querySelector('.map-wrapper');
+    applyTransform(wrapper);
+    initZoom(container, wrapper, areaId);
+}
+
+function initZoom(container, wrapper, areaId) {
+    let isDragging = false;
+    let startPos = { x: 0, y: 0 };
+
+    container.onpointerdown = (e) => {
+        isDragging = true;
+        startPos = { x: e.clientX - transformState.x, y: e.clientY - transformState.y };
+        container.setPointerCapture(e.pointerId);
+    };
+
+    container.onpointermove = (e) => {
+        if (!isDragging) return;
+        transformState.x = e.clientX - startPos.x;
+        transformState.y = e.clientY - startPos.y;
+        applyTransform(wrapper);
+    };
+
+    container.onpointerup = () => isDragging = false;
+
+    container.onwheel = (e) => {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? 0.9 : 1.1;
+        const newScale = Math.min(Math.max(transformState.scale * delta, 1), 3);
+        const rect = container.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        transformState.x -= (mouseX - transformState.x) * (newScale / transformState.scale - 1);
+        transformState.y -= (mouseY - transformState.y) * (newScale / transformState.scale - 1);
+        transformState.scale = newScale;
+        applyTransform(wrapper);
+    };
+}
+
+function applyTransform(wrapper) {
+    wrapper.style.transform = `translate(${transformState.x}px, ${transformState.y}px) scale(${transformState.scale})`;
+    wrapper.querySelectorAll('.apt-marker').forEach(m => {
+        m.style.transform = `rotate(-45deg) scale(${1 / transformState.scale})`;
     });
 }
 
@@ -222,8 +293,6 @@ function hideInfo() {
     document.getElementById('modalContent').style.display = 'none';
 }
 
-// 초기 로딩 (산성역 기준)
-window.onload = () => { 
-    renderMarkers('sansung'); 
-    updateAreaInfo('sansung'); 
+window.onload = () => {
+    openTab({ currentTarget: document.querySelector('.tab-btn') }, 'sansung');
 };
