@@ -159,7 +159,8 @@ const areaInfo = {
  */
 let transformState = { scale: 1, x: 0, y: 0 };
 let isDraggingGlobal = false;
-let activePointers = new Map(); // 멀티터치 관리
+let activePointers = new Map();
+let prevDiff = -1;
 
 function openTab(evt, areaId) {
     document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
@@ -203,6 +204,9 @@ function renderMarkers(areaId) {
             if (distance < 10) {
                 e.preventDefault();
                 e.stopPropagation();
+                
+                // 모달을 띄우기 전 pointer 상태 해제 유도
+                marker.releasePointerCapture(e.pointerId);
                 setTimeout(() => showInfo(apt.name, apt.detail), 10);
             }
         });
@@ -213,6 +217,10 @@ function renderMarkers(areaId) {
 
 function resetZoom(areaId) {
     transformState = { scale: 1, x: 0, y: 0 };
+    activePointers.clear();
+    prevDiff = -1;
+    isDraggingGlobal = false;
+    
     const container = document.getElementById(`map-${areaId}`);
     const wrapper = container.querySelector('.map-wrapper');
     applyTransform(wrapper);
@@ -220,11 +228,11 @@ function resetZoom(areaId) {
 }
 
 function initZoom(container, wrapper) {
-    let prevDiff = -1;
-    let startPos = { x: 0, y: 0 };
-
     container.onpointerdown = (e) => {
+        // 모달이 열려있으면 동작 안함
+        if (document.getElementById('modalBg').style.display === 'block') return;
         if (e.target.closest('.apt-marker')) return;
+
         activePointers.set(e.pointerId, e);
         
         if (activePointers.size === 1) {
@@ -235,24 +243,24 @@ function initZoom(container, wrapper) {
     };
 
     container.onpointermove = (e) => {
+        if (document.getElementById('modalBg').style.display === 'block') return;
+        if (!activePointers.has(e.pointerId)) return;
+        
         activePointers.set(e.pointerId, e);
         
-        // 멀티터치 (핀치 줌) 처리
         if (activePointers.size === 2) {
-            isDraggingGlobal = false; // 줌할 때는 드래그 중단
+            isDraggingGlobal = false;
             const pointers = Array.from(activePointers.values());
             const curDiff = Math.hypot(pointers[0].clientX - pointers[1].clientX, pointers[0].clientY - pointers[1].clientY);
             
             if (prevDiff > 0) {
+                const delta = curDiff / prevDiff;
                 const centerX = (pointers[0].clientX + pointers[1].clientX) / 2;
                 const centerY = (pointers[0].clientY + pointers[1].clientY) / 2;
-                const delta = curDiff / prevDiff;
-                
                 zoomAt(delta, centerX, centerY, container, wrapper);
             }
             prevDiff = curDiff;
         } 
-        // 싱글터치 (드래그) 처리
         else if (isDraggingGlobal && activePointers.size === 1) {
             transformState.x = e.clientX - startPos.x;
             transformState.y = e.clientY - startPos.y;
@@ -260,16 +268,20 @@ function initZoom(container, wrapper) {
         }
     };
 
-    const endHandler = (e) => {
+    const handlePointerUp = (e) => {
         activePointers.delete(e.pointerId);
         if (activePointers.size < 2) prevDiff = -1;
-        if (activePointers.size === 0) isDraggingGlobal = false;
+        if (activePointers.size === 0) {
+            isDraggingGlobal = false;
+        }
+        if (container.hasPointerCapture(e.pointerId)) {
+            container.releasePointerCapture(e.pointerId);
+        }
     };
 
-    container.onpointerup = endHandler;
-    container.onpointercancel = endHandler;
+    container.onpointerup = handlePointerUp;
+    container.onpointercancel = handlePointerUp;
 
-    // PC 휠 줌
     container.onwheel = (e) => {
         e.preventDefault();
         const delta = e.deltaY > 0 ? 0.9 : 1.1;
@@ -326,11 +338,16 @@ function showInfo(name, detail) {
     document.getElementById('aptDetail').innerHTML = detail;
     document.getElementById('modalBg').style.display = 'block';
     document.getElementById('modalContent').style.display = 'block';
+    // 모달이 열릴 때 줌 관련 맵을 비움 (터치 엉킴 방지)
+    activePointers.clear();
+    prevDiff = -1;
 }
 
 function hideInfo() {
     document.getElementById('modalBg').style.display = 'none';
     document.getElementById('modalContent').style.display = 'none';
+    // 모달을 닫을 때 줌 로직이 다시 인식되도록 강제 초기화는 하지 않되 상태는 유지
+    isDraggingGlobal = false;
 }
 
 window.onload = () => {
