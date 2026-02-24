@@ -2,37 +2,74 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
 
     <title>내 집 마련 프로젝트</title>
-    <style>
-        body { font-family: sans-serif; line-height: 1.6; padding: 20px; }
-        .link-box { background: #f4f4f4; padding: 15px; border-radius: 8px; }
-        a { color: #007bff; text-decoration: none; font-weight: bold; }
-        a:hover { text-decoration: underline; }
-    </style>
+    <link rel="stylesheet" href="style_index.css">
 </head>
 <body>
-    <h1>밍지와 동그리의 내 집 마련하기!!</h1>
-    <p>아래 링크를 클릭하면 관련 페이지로 이동합니다.</p>
+    <div class="main-container">
+        <header class="main-header">
+            <h1>🏠 <span>내 집 마련 프로젝트</span></h1>
+        </header>
 
-    <div class="link-box">
-        <ul>
-            <li><a href="길음뉴타운/gireum.html" id="link-gireum">길음뉴타운 상세 보기</a></li>
-            <li><a href="성남/seongnam.html" id="link-seongnam">성남 상세 보기</a></li>
-            <li><a href="미금/migum.html" id="link-migum">미금 상세 보기</a></li>
-        </ul>
+        <nav class="project-list">
+            <a href="길음뉴타운/gireum.html" class="list-item" id="link-gireum">
+                <div class="item-color gireum-bg"></div>
+                <div class="item-info">
+                    <div class="item-top">
+                        <span class="item-tag">서울 성북</span>
+                        <span class="item-date">📅 2026.01.24</span>
+                    </div>
+                    <div class="item-title">길음뉴타운</div>
+                    <div class="item-desc">신축 브랜드 타운 분석</div>
+                </div>
+                <div class="item-arrow">➔</div>
+            </a>
+
+            <a href="미금/migum.html" class="list-item" id="link-migum">
+                <div class="item-color migum-bg"></div>
+                <div class="item-info">
+                    <div class="item-top">
+                        <span class="item-tag">경기 분당</span>
+                        <span class="item-date">📅 2026.02.14</span>
+                    </div>
+                    <div class="item-title">미금</div>
+                    <div class="item-desc">더블역세권 및 재건축 이슈</div>
+                </div>
+                <div class="item-arrow">➔</div>
+            </a>
+
+            <a href="성남/seongnam.html" class="list-item" id="link-seongnam">
+                <div class="item-color seongnam-bg"></div>
+                <div class="item-info">
+                    <div class="item-top">
+                        <span class="item-tag">경기 성남</span>
+                        <span class="item-date">📅 2026.02.21</span>
+                    </div>
+                    <div class="item-title">성남</div>
+                    <div class="item-desc">8호선 역세권 재개발 분석</div>
+                </div>
+                <div class="item-arrow">➔</div>
+            </a>
+        </nav>
+
+        <footer class="main-footer">
+            <p>© 2026 밍동</p>
+        </footer>
     </div>
 
     <script>
-        // 페이지 이동 시에도 캐시를 타지 않도록 링크 뒤에 타임스탬프를 자동으로 붙여주는 스크립트
         const timestamp = new Date().getTime();
-        document.getElementById('link-gireum').href += "?v=" + timestamp;
-        document.getElementById('link-seongnam').href += "?v=" + timestamp;
+        const links = ['link-gireum', 'link-seongnam', 'link-migum'];
+        links.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.href += "?v=" + timestamp;
+        });
     </script>
 </body>
 </html>

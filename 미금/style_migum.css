@@ -19,35 +19,45 @@ body {
     min-height: 100vh;
 }
 
-/* 상단 헤더 스타일 */
+/* 상단 헤더 레이아웃 수정 */
 .top-header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    padding: 15px;
-    background: #fff;
+    padding: 10px 15px;
+    background-color: #fff;
     border-bottom: 1px solid #eee;
     position: sticky;
     top: 0;
-    z-index: 101;
+    z-index: 1000;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .back-button {
     background: none;
     border: none;
-    cursor: pointer;
     padding: 5px;
+    cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin-right: 10px;
 }
 
 .page-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #333;
     margin: 0;
-    font-size: 1.25rem;
-    font-weight: 700;
-    flex: 1;
-    text-align: left;
+}
+
+.header-date {
+    font-size: 0.85rem;
+    color: #888;
+    font-weight: 500;
 }
 
 /* 탭 스타일 */
