@@ -3,22 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <title>길음 뉴타운 입지 가이드</title>
-    <link rel="stylesheet" href="style_gireum.css">
+    <title>분당 미금역세권 부동산 가이드</title>
+    <link rel="stylesheet" href="style_migum.css">
 </head>
 <body>
     <div class="container">
         <div class="tabs">
-            <button class="tab-btn active">길음 뉴타운</button>
+            <button class="tab-btn active">미금역세권</button>
         </div>
 
-        <div class="tab-content active">
-            <div class="map-container" id="map-gireum">
+        <div id="migum" class="tab-content active">
+            <div class="map-container" id="map-migum">
                 <div class="map-wrapper">
-                    <img src="map_gireum.png" alt="길음 뉴타운 지도">
+                    <img src="map_migum.png" alt="미금역 지도">
                     <div class="marker-layer"></div>
                 </div>
             </div>
@@ -29,10 +26,10 @@
 
     <div id="modalBg" onclick="hideInfo()"></div>
     <div id="modalContent">
-        <h2 id="aptName"></h2>
-        <div id="aptDetail"></div>
+        <h2 id="aptName">단지명</h2>
+        <div id="aptDetail">상세내용</div>
         
-        <div class="review-box">
+        <div class="review-box" id="reviewBox">
             <div class="review-title">📝 임장 후기</div>
             <div id="aptReview" class="review-content"></div>
         </div>
@@ -40,6 +37,6 @@
         <button onclick="hideInfo()">닫기</button>
     </div>
 
-    <script src="script_gireum.js"></script>
+    <script src="script_migum.js"></script>
 </body>
 </html>
