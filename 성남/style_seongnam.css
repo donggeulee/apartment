@@ -19,6 +19,37 @@ body {
     min-height: 100vh;
 }
 
+/* 상단 헤더 스타일 */
+.top-header {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    position: sticky;
+    top: 0;
+    z-index: 101;
+}
+
+.back-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+}
+
+.page-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    flex: 1;
+    text-align: left;
+}
+
 /* 탭 스타일 */
 .tabs {
     display: flex;
