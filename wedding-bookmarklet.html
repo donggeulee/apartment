@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>삼성 웨딩홀 예약 매크로</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #0d0d1a;
+    color: #f0f0f0;
+    min-height: 100vh;
+    padding-bottom: 40px;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+    padding: 28px 20px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(228,70,70,0.5), transparent);
+  }
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    color: #e44646;
+    background: rgba(228,70,70,0.12);
+    border: 1px solid rgba(228,70,70,0.3);
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    letter-spacing: 1.5px;
+  }
+  .header h1 { font-size: 20px; font-weight: 700; line-height: 1.4; }
+  .header p { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 6px; }
+
+  .section {
+    margin: 16px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .section-header {
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .section-body { padding: 14px 16px; }
+
+  /* 설치 카드 */
+  .install-card {
+    margin: 16px;
+    background: linear-gradient(135deg, rgba(228,70,70,0.12), rgba(228,70,70,0.05));
+    border: 1px solid rgba(228,70,70,0.25);
+    border-radius: 16px;
+    padding: 20px;
+  }
+  .install-card h2 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #fff;
+  }
+  .install-card p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+
+  .bookmarklet-btn {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #e44646, #c0392b);
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Noto Sans KR', sans-serif;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(228,70,70,0.3);
+    transition: all 0.2s;
+    margin-bottom: 12px;
+  }
+  .bookmarklet-btn:active {
+    transform: scale(0.98);
+  }
+
+  .step-list { list-style: none; }
+  .step-list li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 13px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.75);
+  }
+  .step-list li:last-child { border-bottom: none; }
+  .step-num {
+    min-width: 24px;
+    height: 24px;
+    background: rgba(228,70,70,0.2);
+    border: 1px solid rgba(228,70,70,0.4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #e44646;
+    margin-top: 1px;
+  }
+
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 13px;
+  }
+  .info-row:last-child { border-bottom: none; }
+  .info-label { color: rgba(255,255,255,0.4); font-size: 12px; }
+  .info-value { color: #fff; font-weight: 500; }
+  .info-value.highlight { color: #fbbf24; }
+
+  .warn-box {
+    background: rgba(251,191,36,0.08);
+    border: 1px solid rgba(251,191,36,0.2);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin: 0 16px 16px;
+    font-size: 12px;
+    color: rgba(251,191,36,0.9);
+    line-height: 1.7;
+  }
+
+  .usage-steps {
+    margin: 0 16px 16px;
+    background: rgba(74,222,128,0.05);
+    border: 1px solid rgba(74,222,128,0.15);
+    border-radius: 16px;
+    padding: 16px;
+  }
+  .usage-steps h3 {
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(74,222,128,0.7);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .copy-area {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 10px;
+    color: rgba(255,255,255,0.3);
+    word-break: break-all;
+    line-height: 1.5;
+    max-height: 80px;
+    overflow: hidden;
+    margin-bottom: 8px;
+    font-family: monospace;
+  }
+  .copy-btn {
+    width: 100%;
+    padding: 10px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    color: rgba(255,255,255,0.7);
+    font-size: 12px;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+  }
+  .copy-btn.copied {
+    background: rgba(74,222,128,0.15);
+    border-color: rgba(74,222,128,0.3);
+    color: #4ade80;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="badge">📱 MOBILE BOOKMARKLET</div>
+  <h1>삼성사옥 웨딩홀<br>예약 매크로</h1>
+  <p>북마클릿 설치 가이드</p>
+</div>
+
+<!-- 예약 정보 확인 -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-title">📋 설정된 예약 정보</div>
+  </div>
+  <div class="section-body">
+    <div class="info-row">
+      <span class="info-label">웨딩홀</span>
+      <span class="info-value">서초사옥</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">예식 일시</span>
+      <span class="info-value highlight">2027년 6월 19일 13:00</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">신청자</span>
+      <span class="info-value">이동근 (P00305)</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">신랑 / 신부</span>
+      <span class="info-value">이동근 / 구민지</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">부서</span>
+      <span class="info-value">IT개발파트</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">연락처</span>
+      <span class="info-value">010-9283-5845</span>
+    </div>
+  </div>
+</div>
+
+<!-- 설치 방법 -->
+<div class="install-card">
+  <h2>🔖 즐겨찾기에 저장하기</h2>
+  <p>아래 버튼을 <strong>길게 눌러서</strong> 즐겨찾기에 추가하거나,<br>
+  코드를 복사해서 수동으로 추가하세요.</p>
+
+  <a id="bookmarkletLink" class="bookmarklet-btn" href="#">
+    ⭐ 매크로 즐겨찾기에 추가
+  </a>
+
+  <div class="copy-area" id="codePreview">로딩 중...</div>
+  <button class="copy-btn" id="copyBtn" onclick="copyCode()">📋 코드 복사하기</button>
+</div>
+
+<div class="warn-box">
+  ⚠️ <strong>수동 즐겨찾기 추가 방법</strong><br>
+  브라우저 즐겨찾기 추가 → 이름: <strong>웨딩매크로</strong> → URL 자리에 복사한 코드 붙여넣기
+</div>
+
+<!-- 사용 방법 -->
+<div class="usage-steps">
+  <h3>🚀 사용 방법</h3>
+  <ul class="step-list">
+    <li>
+      <span class="step-num">1</span>
+      <span>예약 오픈 시간에 맞춰 <strong>s-wedding.samsungcard.com</strong> 접속</span>
+    </li>
+    <li>
+      <span class="step-num">2</span>
+      <span>주소창 옆 <strong>즐겨찾기 탭</strong>에서 <strong>"웨딩매크로"</strong> 탭</span>
+    </li>
+    <li>
+      <span class="step-num">3</span>
+      <span>소속회사 자동 선택 → 사번 자동 입력 진행</span>
+    </li>
+    <li>
+      <span class="step-num">4</span>
+      <span>🔐 <strong>보안키패드에서 비밀번호만 직접 입력</strong></span>
+    </li>
+    <li>
+      <span class="step-num">5</span>
+      <span>로그인 완료 후 즐겨찾기 다시 탭 → 나머지 자동 진행</span>
+    </li>
+    <li>
+      <span class="step-num">6</span>
+      <span>🧪 정보 입력 완료 후 <strong>신청 버튼은 직접 확인 후 클릭</strong></span>
+    </li>
+  </ul>
+</div>
+
+<div class="section">
+  <div class="section-header">
+    <div class="section-title">⚠️ 주의사항</div>
+  </div>
+  <div class="section-body">
+    <div class="info-row">
+      <span style="font-size:13px;color:rgba(255,255,255,0.6);line-height:1.7">
+        북마클릿은 <strong>현재 페이지 단계</strong>를 자동 감지해서 실행돼요.<br>
+        각 단계마다 즐겨찾기를 탭해서 진행하세요.<br>
+        페이지 이동 후에는 다시 탭해야 다음 단계가 실행됩니다.
+      </span>
+    </div>
+  </div>
+</div>
+
+<script>
+// ================================================
+// 매크로 설정값
+// ================================================
+const CONFIG = {
+  empId: 'P00305',
+  company: '에스에이치피',
+  companyFull: '에스에이치피코퍼레이이',
+  weddingHall: '서초사옥',
+  weddingYear: 2027,
+  weddingMonth: 6,
+  weddingDay: 19,
+  weddingTime: '13:00',
+  name: '이동근',
+  gender: 'male',
+  birthdate: '1989.01.14',
+  dept: 'IT개발파트',
+  emailId: 'dg5845.lee',
+  emailDomain: 'samsung.com',
+  phone: '9283-5845',
+  empIdInfo: 'P00305',
+  role: '신랑',
+  groomName: '이동근',
+  brideName: '구민지',
+};
+
+// ================================================
+// 북마클릿 코드 생성
+// ================================================
+function buildBookmarklet() {
+  const code = `(function(){
+var C=${JSON.stringify(CONFIG)};
+function wait(ms){return new Promise(r=>setTimeout(r,ms));}
+function log(m){console.log('[매크로] '+m);var d=document.createElement('div');d.style='position:fixed;bottom:'+(window._macroY||20)+'px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.85);color:#fff;padding:10px 18px;border-radius:20px;font-size:13px;z-index:99999;font-family:sans-serif;white-space:nowrap;max-width:90vw;text-align:center;border:1px solid rgba(255,255,255,0.2)';d.textContent=m;document.body.appendChild(d);setTimeout(()=>d.remove(),3500);}
+function setVal(el,v){var s=Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype,'value');if(s)s.set.call(el,v);else el.value=v;el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}));}
+function findBtn(t){return [...document.querySelectorAll('button,input[type=button],input[type=submit],a')].find(b=>b.textContent.includes(t)||b.value===t);}
+function getPage(){var b=document.body.innerText||'';if(b.includes('소속회사를 검색'))return 'company';if(b.includes('사원번호(아이디) 로그인')||document.querySelector('input[placeholder*=사번]'))return 'login';if(b.includes('신청정보를 입력해 주세요'))return 'step3';if(b.includes('아래의 내용에 동의'))return 'step2';if(b.includes('웨딩홀과 예식일'))return 'step1';if(b.includes('삼성사옥 웨딩홀 신청')&&b.includes('신청방법'))return 'intro';if(b.includes('결혼도움방'))return 'main';return 'unknown';}
+async function run(){
+var page=getPage();
+log('📍 현재: '+page);
+if(page==='company'){
+  var inp=document.querySelector('input[type=text]');
+  if(inp){setVal(inp,C.company);await wait(300);}
+  var sb=findBtn('검색');if(sb){sb.click();await wait(1200);}
+  var items=[...document.querySelectorAll('li,label,div')].filter(el=>el.textContent.includes(C.companyFull));
+  if(items.length){items[0].click();await wait(400);log('✅ 소속회사 선택');}
+  var cb=findBtn('선택 완료');if(cb){cb.click();log('➡️ 완료');}
+}
+else if(page==='login'){
+  var ids=document.querySelectorAll('input[type=text],input:not([type])');
+  for(var i of ids){if((i.placeholder||'').includes('사번')||(i.placeholder||'').includes('아이디')||(i.closest('tr,div,label')||{textContent:''}).textContent.includes('사원번호')){setVal(i,C.empId);log('✅ 사번 입력 완료: '+C.empId);break;}}
+  log('🔐 보안키패드에서 비밀번호 입력 후 로그인 버튼을 눌러주세요!');
+}
+else if(page==='main'){
+  var links=[...document.querySelectorAll('a,button')];
+  var al=links.find(l=>l.textContent.includes('삼성사옥 웨딩홀')||l.textContent.includes('웨딩홀 신청'));
+  if(al){al.click();log('➡️ 웨딩홀 신청으로 이동');}
+  else{log('⚠️ 메뉴에서 삼성사옥 웨딩홀 신청을 직접 탭해주세요');}
+}
+else if(page==='intro'){
+  var btn=findBtn('신청');if(btn){btn.click();log('➡️ 신청 진입');await wait(800);}
+  await wait(600);
+  var popOk=[...document.querySelectorAll('button')].find(b=>b.textContent.trim()==='확인'&&b.offsetParent);
+  if(popOk){popOk.click();log('팝업 닫기');}
+}
+else if(page==='step1'){
+  await wait(500);
+  var sels=document.querySelectorAll('select');
+  for(var sel of sels){var opt=[...sel.options].find(o=>o.text.includes(C.weddingHall));if(opt){sel.value=opt.value;sel.dispatchEvent(new Event('change',{bubbles:true}));log('✅ 웨딩홀: '+C.weddingHall);await wait(800);break;}}
+  var tries=0;
+  while(tries++<24){
+    var title=document.querySelector('[class*=calendar] h3,[class*=calender] h3,.calendar-title,[class*=month-title],[class*=monthTitle]');
+    if(!title){await wait(400);continue;}
+    var m=title.textContent.match(/(\d{4})년\s*(\d{1,2})월/);
+    if(!m){await wait(400);continue;}
+    var cy=parseInt(m[1]),cm=parseInt(m[2]);
+    if(cy===C.weddingYear&&cm===C.weddingMonth)break;
+    var needNext=(cy<C.weddingYear)||(cy===C.weddingYear&&cm<C.weddingMonth);
+    var navBtns=[...document.querySelectorAll('button,span,a,i')];
+    if(needNext){var nb=navBtns.find(b=>/next|right|chevron-r|›|>|▶/.test(b.className+b.textContent));if(nb){nb.click();await wait(500);}}
+    else{var pb=navBtns.find(b=>/prev|left|chevron-l|‹|<|◀/.test(b.className+b.textContent));if(pb){pb.click();await wait(500);}}
+  }
+  log('📅 '+C.weddingYear+'년 '+C.weddingMonth+'월로 이동');
+  var cells=[...document.querySelectorAll('td,[class*=day],[class*=date]')];
+  var dc=cells.find(c=>parseInt(c.textContent.trim())===C.weddingDay&&!c.textContent.includes('마감')&&!c.classList.contains('disabled'));
+  if(dc){dc.click();log('✅ '+C.weddingDay+'일 선택');await wait(600);}
+  else{log('⚠️ 날짜를 직접 선택해주세요 ('+C.weddingDay+'일)');}
+  var tLabels=[...document.querySelectorAll('label,span,div,li')].filter(el=>el.textContent.trim()===C.weddingTime||el.textContent.includes(C.weddingTime));
+  for(var tl of tLabels){
+    var sib=tl.nextElementSibling||tl.previousElementSibling;
+    if(sib&&sib.textContent.includes('예약가능')||tl.textContent.includes('예약가능')){
+      var r=tl.querySelector('input[type=radio]')||(tl.id?document.querySelector('input[for="'+tl.id+'"]'):null);
+      if(r)r.click();else tl.click();
+      log('✅ 시간: '+C.weddingTime);break;
+    }
+    var r2=document.querySelectorAll('input[type=radio]');
+    for(var rr of r2){var rl=document.querySelector('label[for="'+rr.id+'"]');if(rl&&rl.textContent.includes(C.weddingTime)){rr.click();log('✅ 시간: '+C.weddingTime);break;}}
+  }
+  await wait(400);
+  var ok=[...document.querySelectorAll('button')].find(b=>b.textContent.trim()==='확인'&&b.offsetParent);
+  if(ok){ok.click();await wait(600);}
+  var next=findBtn('다음');if(next){next.click();log('➡️ 다음 단계');}
+}
+else if(page==='step2'){
+  await wait(500);
+  var cbs=document.querySelectorAll('input[type=checkbox]');
+  var allCb=[...cbs].find(c=>{var l=document.querySelector('label[for="'+c.id+'"]')||c.closest('label')||c.parentElement;return(l&&l.textContent.includes('전체'));});
+  if(allCb&&!allCb.checked){allCb.click();log('✅ 전체 동의');}
+  else{[...cbs].forEach(c=>{if(!c.checked)c.click();});}
+  await wait(400);
+  var next=findBtn('다음');if(next){next.click();log('➡️ 다음 단계');}
+}
+else if(page==='step3'){
+  await wait(600);
+  function getLabel(el){if(el.id){var l=document.querySelector('label[for="'+el.id+'"]');if(l)return l;}var p=el.parentElement;for(var i=0;i<4;i++){if(!p)break;var l=p.querySelector('label')||(p.tagName==='LABEL'?p:null);if(l)return l;p=p.parentElement;}return null;}
+  var inputs=document.querySelectorAll('input[type=text],input[type=email],input:not([type])');
+  for(var inp of inputs){
+    var l=getLabel(inp);var lt=(l&&l.textContent||inp.placeholder||inp.name||'');
+    if(lt.includes('성명')&&!lt.includes('신랑')&&!lt.includes('신부'))setVal(inp,C.name);
+    else if(lt.includes('생년월일'))setVal(inp,C.birthdate);
+    else if(lt.includes('부서'))setVal(inp,C.dept);
+    else if(lt.includes('이메일')||lt.includes('메일'))setVal(inp,C.emailId);
+    else if(lt.includes('사번')||lt.includes('사원번호'))setVal(inp,C.empIdInfo);
+    else if(lt.includes('휴대')||lt.includes('전화'))setVal(inp,C.phone);
+    else if(lt.includes('신랑 성명')||lt.includes('신랑성명'))setVal(inp,C.groomName);
+    else if(lt.includes('신부 성명')||lt.includes('신부성명'))setVal(inp,C.brideName);
+  }
+  var sels=document.querySelectorAll('select');
+  for(var sel of sels){
+    var opts=[...sel.options];
+    if(opts.some(o=>o.text.includes('samsung'))){var o=opts.find(o=>o.text.includes(C.emailDomain));if(o){sel.value=o.value;sel.dispatchEvent(new Event('change',{bubbles:true}));}}
+    if(opts.some(o=>o.text.trim()==='010')){sel.value='010';sel.dispatchEvent(new Event('change',{bubbles:true}));}
+  }
+  var radios=document.querySelectorAll('input[type=radio]');
+  for(var r of radios){
+    var rl=document.querySelector('label[for="'+r.id+'"]')||r.closest('label');
+    var rt=(rl&&rl.textContent||'');
+    if((C.gender==='male'&&(rt.includes('남자')||rt.includes('남')))&&!rt.includes('신랑'))r.click();
+    if(rt.trim().includes(C.role))r.click();
+  }
+  log('✅ 정보 입력 완료! 내용 확인 후 신청 버튼을 직접 눌러주세요 🎉');
+  log('🧪 테스트 모드: 신청 버튼은 직접 클릭!');
+}
+else{log('⚠️ 페이지를 인식할 수 없어요. 현재 URL을 확인해주세요.');}
+}
+run();
+})();`;
+  return 'javascript:' + encodeURIComponent(code);
+}
+
+// 페이지 로드 시 실행
+window.addEventListener('DOMContentLoaded', function() {
+  const href = buildBookmarklet();
+  const link = document.getElementById('bookmarkletLink');
+  link.href = href;
+
+  const preview = document.getElementById('codePreview');
+  preview.textContent = href.substring(0, 200) + '...';
+
+  window._bookmarkletCode = href;
+});
+
+function copyCode() {
+  const code = window._bookmarkletCode;
+  if (!code) return;
+
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(code).then(() => {
+      const btn = document.getElementById('copyBtn');
+      btn.textContent = '✅ 복사 완료!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = '📋 코드 복사하기';
+        btn.classList.remove('copied');
+      }, 2500);
+    });
+  } else {
+    // fallback
+    const ta = document.createElement('textarea');
+    ta.value = code;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = '✅ 복사 완료!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = '📋 코드 복사하기';
+      btn.classList.remove('copied');
+    }, 2500);
+  }
+}
+</script>
+</body>
+</html>
